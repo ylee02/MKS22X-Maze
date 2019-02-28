@@ -24,8 +24,17 @@ public class Maze{
 
     */
 
-    public Maze(String filename) throws FileNotFoundException{
-        //COMPLETE CONSTRUCTOR
+    public Maze(String filename) throws FileNotFoundException
+      try {
+        File fil = new File(filename);
+        Scanner in = new Scanner(fil);
+        while (in.hasNextLine()){
+        }
+      }catch (FileNotFoundException e){
+        System.out.println("Error: File " + filename + " not found");
+        e.printStackTrace();
+        System.exit(1);
+      }
     }
 
 
