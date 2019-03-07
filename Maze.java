@@ -27,7 +27,7 @@ public class Maze{
 
     */
 
-    public Maze(String filename) throws FileNotFoundException {
+    public Maze(String filename) throws FileNotFoundException{
       try {
         File fil = new File(filename);
         Scanner in = new Scanner(fil);
@@ -48,7 +48,7 @@ public class Maze{
         System.exit(1);
       }
     }
-	
+
 	private void test() {
 		int a = 0, b = 0;
 		for (int i =0; i < maze.length; i++) {
@@ -62,10 +62,11 @@ public class Maze{
 					starty = i;
 				}
 			}
-			if (a > 1 || b > 1 || b == 0 || a ==0 ){
-				throw new IllegalArgumentException("There has to be only one E and one S");
-			}
+
 		}
+    if (a > 1 || b > 1 || b == 0 || a ==0 ){
+      throw new IllegalArgumentException("There has to be only one E and one S");
+    }
 	}
 
 
@@ -104,7 +105,7 @@ public class Maze{
     public int solve(){
 
             //find the location of the S.
-			
+
 
             //erase the S
 
@@ -146,37 +147,26 @@ public class Maze{
 	private boolean addAt(int row, int col) {
 		char temp = maze[row][col];
 		if(temp == '.' || temp == '#' || temp == '@') return false;
+    maze[row][col] = '@';
 		return true;
 	}
-	
-	
+
+
     private int solve(int row, int col, int ans){ //you can add more parameters since this is private
-		if (maze[row][col] == 'E') {
-			return ans;
-		}
-		if (addAt(row, col)) {
-			for (int i = 0; i < 8; i+=2) {
-				if (solve(row + moves[i], col + moves[i + 1], ans += 1) != -1) {
-					return ans;
-				}
-			}
-		}
-        //automatic animation! You are welcome.
-        /*if(animate){
-
-            clearTerminal();
-            System.out.println(this);
-
-            wait(20);
-        }
-		*/
-
-        //COMPLETE SOLVE
-		if (maze[row][col] != '#') {
-			maze[row][col] = '.';
-		}
-		ans -= 1;
-        return -1; //so it compiles
+  		if (maze[row][col] == 'E') {
+        maze[row][col] = '@';
+  			return ans;
+  		}
+  		if (addAt(row, col)) {
+  			for (int i = 0; i < 8; i+=2) {
+  				if (solve(row + moves[i], col + moves[i + 1], ans += 1) != -1) {
+  					return ans;
+  				}
+  			}
+        maze[row][col] = '.';
+  		}
+  		ans -= 1;
+      return -1; //so it compiles
     }
 
 
