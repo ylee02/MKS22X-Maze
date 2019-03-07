@@ -5,6 +5,9 @@ public class Maze{
 
     private char[][]maze;
     private boolean animate;//false by default
+	private int startx;
+	private int starty;
+	private int[][] moves == {1,0,-1,0,0,-1,0,1};
 
     /*Constructor loads a maze text file, and sets animate to false by default.
 
@@ -28,14 +31,41 @@ public class Maze{
       try {
         File fil = new File(filename);
         Scanner in = new Scanner(fil);
+		ArrayList<String> temp = new ArrayList<String>();
         while (in.hasNextLine()){
+			temp.add(in.nextLine());
         }
+		maze = new char[temp.size][temp.get(0).length()];
+		for (int i =0; i < maze.length; i++) {
+			for (int y= 0; y < maze[0].length; y++) {
+				maze[i][y] = temp.get(i).charAt(y);
+			}
+		}
+		test();
       }catch (FileNotFoundException e){
         System.out.println("Error: File " + filename + " not found");
         e.printStackTrace();
         System.exit(1);
       }
     }
+	
+	private void test() {
+		int a = 0, b = 0;
+		for (int i =0; i < maze.length; i++) {
+			for (int y= 0; y < maze[0].length; y++) {
+				if (maze[i][y] == 'E') {
+					a += 1;
+				}
+				if (maze[i][y] == 'S') {
+					b + =1;
+					startx = y;
+					starty = i;
+				}
+			}
+			if (a > 1 || b > 1 || b == 0 || a ==0 ){
+				throw new IllegalArgumentException("There has to be only one E and one S");
+			}
+		}
 
 
     private void wait(int millis){
@@ -73,7 +103,7 @@ public class Maze{
     public int solve(){
 
             //find the location of the S.
-
+			
 
             //erase the S
 
@@ -81,8 +111,19 @@ public class Maze{
             //and start solving at the location of the s.
 
             //return solve(???,???);
+			return solve(starty, startx);
 
     }
+	public String toString() {
+		String ans = "";
+		for (int i =0; i < maze.length; i++) {
+			for (int y = 0; y <maze[0].length; y++) {
+				ans += maze[i][y] + " ";
+			}
+			ans += "\n";
+		}
+		return ans;
+	}
 
     /*
       Recursive Solve function:
@@ -101,20 +142,38 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-    private int solve(int row, int col){ //you can add more parameters since this is private
-
-
+	private boolean addAt(row, col) {
+		char temp = maze[row][col];
+		if(temp == '.' || temp == '#' || temp == '@') return false;
+		return true;
+	}
+	
+	
+    private int solve(int row, int col, int ans){ //you can add more parameters since this is private
+		if (maze[row][col] == 'E') {
+			return ans;
+		}
+		if (addAt(row, col)) {
+			for (int i = 0; i < 8; i+=2) {
+				if (solve(row + moves[i], rows + moves[i + 1], ans += 1) != -1) {
+					return ans;
+				}
+			}
+		}
         //automatic animation! You are welcome.
-        if(animate){
+        /*if(animate){
 
             clearTerminal();
             System.out.println(this);
 
             wait(20);
         }
+		*/
 
         //COMPLETE SOLVE
-
+		if (maze[row][col] != '#') {
+			maze[row][col] = '.';
+		}
         return -1; //so it compiles
     }
 
