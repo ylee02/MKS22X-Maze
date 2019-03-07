@@ -7,7 +7,7 @@ public class Maze{
     private boolean animate;//false by default
 	private int startx;
 	private int starty;
-	private int[][] moves == {1,0,-1,0,0,-1,0,1};
+	private int[] moves = {1,0,-1,0,0,-1,0,1};
 
     /*Constructor loads a maze text file, and sets animate to false by default.
 
@@ -27,7 +27,7 @@ public class Maze{
 
     */
 
-    public Maze(String filename) throws FileNotFoundException
+    public Maze(String filename) throws FileNotFoundException {
       try {
         File fil = new File(filename);
         Scanner in = new Scanner(fil);
@@ -35,7 +35,7 @@ public class Maze{
         while (in.hasNextLine()){
 			temp.add(in.nextLine());
         }
-		maze = new char[temp.size][temp.get(0).length()];
+		maze = new char[temp.size()][temp.get(0).length()];
 		for (int i =0; i < maze.length; i++) {
 			for (int y= 0; y < maze[0].length; y++) {
 				maze[i][y] = temp.get(i).charAt(y);
@@ -57,7 +57,7 @@ public class Maze{
 					a += 1;
 				}
 				if (maze[i][y] == 'S') {
-					b + =1;
+					b +=1;
 					startx = y;
 					starty = i;
 				}
@@ -66,6 +66,7 @@ public class Maze{
 				throw new IllegalArgumentException("There has to be only one E and one S");
 			}
 		}
+	}
 
 
     private void wait(int millis){
@@ -111,7 +112,7 @@ public class Maze{
             //and start solving at the location of the s.
 
             //return solve(???,???);
-			return solve(starty, startx);
+			return solve(starty, startx,0);
 
     }
 	public String toString() {
@@ -142,7 +143,7 @@ public class Maze{
 
         All visited spots that are part of the solution are changed to '@'
     */
-	private boolean addAt(row, col) {
+	private boolean addAt(int row, int col) {
 		char temp = maze[row][col];
 		if(temp == '.' || temp == '#' || temp == '@') return false;
 		return true;
@@ -155,7 +156,7 @@ public class Maze{
 		}
 		if (addAt(row, col)) {
 			for (int i = 0; i < 8; i+=2) {
-				if (solve(row + moves[i], rows + moves[i + 1], ans += 1) != -1) {
+				if (solve(row + moves[i], col + moves[i + 1], ans += 1) != -1) {
 					return ans;
 				}
 			}
@@ -174,6 +175,7 @@ public class Maze{
 		if (maze[row][col] != '#') {
 			maze[row][col] = '.';
 		}
+		ans -= 1;
         return -1; //so it compiles
     }
 
