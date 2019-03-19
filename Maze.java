@@ -8,6 +8,7 @@ public class Maze{
 	private int startx;
 	private int starty;
 	private int[] moves = {1,0,-1,0,0,-1,0,1};
+  private int ans = 1;
 
     /*Constructor loads a maze text file, and sets animate to false by default.
 
@@ -113,7 +114,7 @@ public class Maze{
             //and start solving at the location of the s.
 
             //return solve(???,???);
-			return solve(starty, startx,0);
+			return solve(starty, startx);
 
     }
 	public String toString() {
@@ -152,14 +153,15 @@ public class Maze{
 	}
 
 
-    private int solve(int row, int col, int ans){ //you can add more parameters since this is private
+    private int solve(int row, int col){ //you can add more parameters since this is private
   		if (maze[row][col] == 'E') {
         maze[row][col] = '@';
   			return ans;
   		}
   		if (addAt(row, col)) {
   			for (int i = 0; i < 8; i+=2) {
-  				if (solve(row + moves[i], col + moves[i + 1], ans += 1) != -1) {
+          ans += 1;
+  				if (solve(row + moves[i], col + moves[i + 1]) != -1) {
   					return ans;
   				}
   			}
